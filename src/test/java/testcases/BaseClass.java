@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.Properties;
 
 public class BaseClass {
-    public WebDriver driver;
+    static public WebDriver driver;
     public Logger logger;
     public Properties p;
     @BeforeClass(groups= {"sanity","regression","master"})
@@ -31,7 +31,7 @@ public class BaseClass {
 
     {
         //loading properties file
-        FileReader file=new FileReader(".//src//test//resources//config.properties");
+        FileReader file=new FileReader("C:\\Users\\Oleksandr\\IdeaProjects\\AutoFramework\\src\\test\\resources\\properties");
         p=new Properties();
         p.load(file);
 
