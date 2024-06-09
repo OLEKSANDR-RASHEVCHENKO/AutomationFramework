@@ -7,7 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class TC_002_LoginTest extends BaseClass{
-    @Test
+    @Test(groups = {"sanity","master"})
     public void verify_login()
     {
         logger.info("**** Starting TC_002_LoginTest  ****");
