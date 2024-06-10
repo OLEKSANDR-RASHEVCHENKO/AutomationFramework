@@ -2,3 +2,4 @@ appUrl = http://localhost/opencart/upload/index.php
 email = rashevchenkoogmail.com
 password = test@123
 searchProductName = iPhone
+execution_env = remote

@@ -4,10 +4,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -16,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
@@ -39,15 +43,39 @@ public class BaseClass {
         //loading log4j
         logger=LogManager.getLogger(this.getClass());//Log4j
 
+        if (p.getProperty("execution_env").equalsIgnoreCase("remote")) {
 
-        //launching browser based on condition
-        switch(br.toLowerCase())
-        {
-            case "chrome": driver=new ChromeDriver(); break;
-            case "edge": driver=new EdgeDriver(); break;
-            default: System.out.println("No matching browser..");
+            DesiredCapabilities cap = new DesiredCapabilities();
+            if (os.equalsIgnoreCase("windows")){
+                cap.setPlatform(Platform.WIN11);
+            }
+            else if (os.equalsIgnoreCase("mac")){
+                cap.setPlatform(Platform.MAC);
+            }else {
+                System.out.println("no matching os");
                 return;
+            }
+
+            switch (br.toLowerCase()){
+                case"chrome":cap.setBrowserName("chrome");break;
+                case"edge":cap.setBrowserName("MicrosoftEdge");break;
+                default: System.out.println("no matching browser");break;
+            }
+            driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),cap);
         }
+        if (p.getProperty("execution_env").equalsIgnoreCase("local")){
+            //launching browser based on condition
+            switch(br.toLowerCase())
+            {
+                case "chrome": driver=new ChromeDriver(); break;
+                case "edge": driver=new EdgeDriver(); break;
+                default: System.out.println("No matching browser..");
+                    return;
+            }
+        }
+
+
+
 
         driver.manage().deleteAllCookies();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
